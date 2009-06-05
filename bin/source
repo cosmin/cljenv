@@ -125,6 +125,9 @@ function cljenv_activate() {
     export CLJENV_NAME
 
     if [ -f $ENVFILE ] ; then
+    
+        CLJENV_ROOT=`readlink -f $(dirname $ENVFILE)`
+    
         _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
         _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
         _OLD_CLJENV_CLOJURE_CONTRIB_JAR="$CLOJURE_CONTRIB_JAR"
