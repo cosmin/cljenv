@@ -174,6 +174,5 @@ function cljenv_default() {
 }
 
 function cljenv_autostart() {
-    cljenv_activate `path_for_create` `first_available_env_name`
+    cljenv_activate `cljenv_path_for_create` `cljenv_first_available_env_name`
 }
-
