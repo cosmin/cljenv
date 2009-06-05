@@ -7,7 +7,7 @@
 
 (defun cljenv-init ()
   (add-to-list 'load-path (concat cljenv-emacs-path "swank-clojure/"))
-  (add-to-lsit 'load-path (concat cljenv-emacs-path "clojure-mode/"))
+  (add-to-list 'load-path (concat cljenv-emacs-path "clojure-mode/"))
 
   (if (getenv "CLOJURE_JAR")
       (progn
@@ -17,11 +17,7 @@
         (setq swank-clojure-binary "clj")
         
         (require 'clojure-mode)
-        (require 'swank-clojure-autoload)
-
-        (require 'slime)
-        (slime-setup '(slime-repl))
-        
+        (require 'swank-clojure-autoload)        
         )))
   
 (provide 'cljenv)
