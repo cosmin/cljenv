@@ -1,4 +1,4 @@
-PATH_TO_CLJENV=`readlink -f "$(dirname $BASH_SOURCE)/../"`
+PATH_TO_CLJENV="$(dirname $BASH_SOURCE)/../"
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
@@ -147,7 +147,7 @@ function cljenv_activate() {
 
     if [ -f $ENVFILE ] ; then
     
-        CLJENV_ROOT=`readlink -f $(dirname $ENVFILE)`
+        CLJENV_ROOT=$(dirname $ENVFILE)
     
         _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
         _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
