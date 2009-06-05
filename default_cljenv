@@ -1,0 +1,7 @@
+CLOJURE_JAR="$0/lib/clojure-1.0.0.jar" # path to clojure.jar
+CLOJURE_CONTRIB_JAR="" # path to clojure-contrib.jar
+CLOJURE_CLASSPATH="" # classpath to launch clojure with
+
+CLOJURE_JAVA_PATH="java" # path to java executable to use
+CLOJURE_VM_ARGS="" # virtual machine arguments when starting JVM
+CLOJURE_NATIVE_LIBRARY_PATH="" # path to native libraries for JVM
