@@ -42,6 +42,15 @@ function cljenv_create() {
 function cljenv_activate() {
 
     cljenv_deactivate () {
+    
+        unset CLOJURE_JAR
+        unset CLOJURE_CONTRIB_JAR
+        unset CLOJURE_JAVA_PATH
+        unset CLOJURE_CLASSPATH
+        unset CLOJURE_VM_ARGS
+        unset CLOJURE_NATIVE_LIBRARY_PATH
+        unset CLJENV_NAME
+
         if [ -n "$_OLD_CLJENV_PATH" ] ; then
             PATH="$_OLD_CLJENV_PATH"
             export PATH
@@ -108,9 +117,12 @@ function cljenv_activate() {
             if [ -n "$_CLJENV_AUTOSTART" ] ; then
                 if [ ! "$_CLJENV_AUTOSTART" = "$CLJENV_FILE" ] ; then
                     echo 'Going back to autostart'
+                    unset CLJENV_FILE
                     cljenv_autostart $_CLJENV_AUTOSTART $_CLJENV_AUTOSTART_NAME
                 else
                     echo 'Unloading autostart'
+                    unset _CLJENV_AUTOSTART_NAME
+                    unset _CLJENV_AUTOSTART
                 fi
             fi
         fi
