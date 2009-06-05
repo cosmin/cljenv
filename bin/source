@@ -104,6 +104,10 @@ function cljenv_activate() {
         if [ ! "$1" = "nondestructive" ] ; then
         # Self destruct!
             unset cljenv_deactivate
+
+            if [ -n "$_CLJENV_AUTOSTART" ] ; then
+                cljenv_autostart $_CLJENV_AUTOSTART $_CLJENV_AUTOSTART_NAME
+            fi
         fi
     }
 
@@ -134,7 +138,7 @@ function cljenv_activate() {
         _OLD_CLJENV_CLOJURE_CLASSPATH="$CLOJURE_CLASSPATH"
         _OLD_CLJENV_CLOJURE_VM_ARGS="$CLOJURE_VM_ARGS"
         _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH="$CLOJURE_NATIVE_LIBRARY_PATH"
-        
+
         . $ENVFILE
 
         export CLOJURE_JAVA_PATH
@@ -191,6 +195,9 @@ function cljenv_autostart() {
     else
         ENV_NAME=`cljenv_first_available_env_name`
     fi
+
+    export _CLJENV_AUTOSTART=`cljenv_path_for_create`
+    export _CLJENV_AUTOSTART_NAME=$ENV_NAME
     
     cljenv_activate `cljenv_path_for_create` $ENV_NAME
 }
