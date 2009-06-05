@@ -4,6 +4,16 @@ USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
 DEFAULT_CLJENV_PATH="$PATH_TO_CLJENV/default_cljenv"
 
+function cljenv_first_available_env_name() {
+   if [ -f "$USER_CLJENV_PATH" ] ; then
+        echo "user"
+    elif [ -f "$SYSTEM_CLJENV_PATH" ] ; then
+        echo "system"
+    else
+        echo "default"
+    fi
+}
+
 function cljenv_path_for_create() {
     if [ -f "$USER_CLJENV_PATH" ] ; then
         echo $USER_CLJENV_PATH
@@ -159,8 +169,11 @@ function cljenv_user() {
     cljenv_activate $USER_CLJENV_PATH user
 }
 
-function cljenv_default {
+function cljenv_default() {
     cljenv_activate $DEFAULT_CLJENV_PATH default
 }
 
-cljenv_activate || cljenv_user || cljenv_system || cljenv_default
+function cljenv_autostart() {
+    cljenv_activate `path_for_create` `first_available_env_name`
+}
+

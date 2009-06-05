@@ -1,0 +1,37 @@
+CLJENV
+
+Installation:
+
+  To start using CLJENV you just have to source the bin/source file.
+  Currently only BASH 3 or later is supported, need someone to help with ZSH.
+
+Default environments:
+
+  USER: $HOME/.cljenv
+  SYSTEM: /etc/cljenv/system_cljenv
+  DEFAULT: /path/to/installation/folder/default_cljenv
+
+Activating an environment:
+
+  cljenv_autostart # activate the first environment of USER, SYSTEM, DEFAULT
+  
+  cljenv_user # activate the user environment
+  cljenv_system # activate the system environment
+  cljenv_default # actiavte the default environment
+
+  # use the following commmands to activate environments you create (see below)
+
+  cljenv_activate # activate the environment in the current directory
+  cljenv_actiavte path/to/env/folder # activate the given environment
+
+Creating a new environment:
+
+  cljenv_create # create a new environment in the current folder
+  cljenv_create path_to_folder # create a new environment in the given folder
+
+  After running cljenv_create edit the .cljenv file in either the current or
+  specified folders to set your options for java, clojure, and clojure-contrib
+
+Deactivating an environment:
+
+  cljenv_deactivate # deactivate the currently active environment
