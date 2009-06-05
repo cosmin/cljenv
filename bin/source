@@ -42,7 +42,7 @@ function cljenv_create() {
 function cljenv_activate() {
 
     cljenv_deactivate () {
-        if [ -n "$OLD_CLJENV_PATH" ] ; then
+        if [ -n "$_OLD_CLJENV_PATH" ] ; then
             PATH="$_OLD_CLJENV_PATH"
             export PATH
             unset _OLD_CLJENV_PATH
@@ -133,6 +133,13 @@ function cljenv_activate() {
         _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH="$CLOJURE_NATIVE_LIBRARY_PATH"
         
         . $ENVFILE
+
+        export CLOJURE_JAVA_PATH
+        export CLOJURE_JAR
+        export CLOJURE_CONTRIB_JAR
+        export CLOJURE_CLASSPATH
+        export CLOJURE_VM_ARGS
+        export CLOJURE_NATIVE_LIBRARY_PATH
     else
         echo "ERROR: Cannot locate CLJENV definition at $ENVFILE"
         return 1
