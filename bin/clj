@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 
-CLOJURE_PATH=$CLOJURE_JAR:$CLOJURE_CONTRIB_JAR:$CLOJURE_CLASSPATH:"$0/../lib/jline-0.9.94.jar"
-$CLOJURE_JAVA_PATH $CLOJURE_VM_ARGS $CLOJURE_NATIVE_LIBRARY_PATH -cp $CLOJURE_PATH clojure.main "$@"
+CLOJURE_PATH=$CLOJURE_JAR:$CLOJURE_CONTRIB_JAR:$CLOJURE_CLASSPATH:`readlink -f "$(dirname $0)/../lib/jline-0.9.94.jar"`
+
+INVOKE_LINE="$CLOJURE_JAVA_PATH $CLOJURE_VM_ARGS $CLOJURE_NATIVE_LIBRARY_PATH -cp $CLOJURE_PATH"
+
+if [ -z "$1" ] ; then
+    $INVOKE_LINE jline.ConsoleRunner clojure.main
+else
+    $INVOKE_LINE clojure.main "$@"
+fi
