@@ -32,7 +32,7 @@ function cljenv_create() {
     fi
 
     if [ -d $TARGET ] ; then
-        cp `cljenv_path_for_create` $TARGET
+        cp `cljenv_path_for_create` $TARGET/.cljenv
     else
         echo "ERROR: target $TARGET does not exist"
         exit 1
