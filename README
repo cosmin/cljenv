@@ -14,6 +14,7 @@ Default environments:
 Activating an environment:
 
   cljenv_autostart # activate the first environment of USER, SYSTEM, DEFAULT
+  cljenv_autostart NOPS1 # activate the first env, but surpress PS1 modification
   
   cljenv_user # activate the user environment
   cljenv_system # activate the system environment
@@ -22,7 +23,7 @@ Activating an environment:
   # use the following commmands to activate environments you create (see below)
 
   cljenv_activate # activate the environment in the current directory
-  cljenv_actiavte path/to/env/folder # activate the given environment
+  cljenv_activate path/to/env/folder # activate the given environment
 
 Creating a new environment:
 

@@ -147,15 +147,17 @@ function cljenv_activate() {
 
     export PATH="$PATH_TO_CLJENV/bin:$PATH"
 
-    _OLD_CLJENV_PS1="$PS1"
-    if [ "`basename \"$CLJENV_NAME\"`" = "__" ] ; then
+    if [ "$CLJENV_NAME" != "NOPS1" ] ; then
+        _OLD_CLJENV_PS1="$PS1"
+        if [ "`basename \"$CLJENV_NAME\"`" = "__" ] ; then
     # special case for Aspen magic directories
     # see http://www.zetadev.com/software/aspen/
-        PS1="[`basename \`dirname \"$CLJENV_NAME\"\``] $PS1"
-    else
-        PS1="(`basename \"$CLJENV_NAME\"`)$PS1"
+            PS1="[`basename \`dirname \"$CLJENV_NAME\"\``] $PS1"
+        else
+            PS1="(`basename \"$CLJENV_NAME\"`)$PS1"
+        fi
+        export PS1
     fi
-    export PS1
     
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
@@ -181,5 +183,11 @@ function cljenv_default() {
 }
 
 function cljenv_autostart() {
-    cljenv_activate `cljenv_path_for_create` `cljenv_first_available_env_name`
+    if [ "$1" == "NOPS1" ] ; then
+        ENV_NAME="NOPS1"
+    else
+        ENV_NAME=`cljenv_first_available_env_name`
+    fi
+    
+    cljenv_activate `cljenv_path_for_create` $ENV_NAME
 }
