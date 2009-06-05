@@ -1,6 +1,4 @@
-echo "$BASH_SOURCE"
-
-PATH_TO_CLJENV="$(dirname $BASH_SOURCE)/../"
+PATH_TO_CLJENV=`readlink -f "$(dirname $BASH_SOURCE)/../"`
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
@@ -34,6 +32,12 @@ function cljenv_create() {
 function cljenv_activate() {
 
     cljenv_deactivate () {
+        if [ -n "$OLD_CLJENV_PATH" ] ; then
+            PATH="$_OLD_CLJENV_PATH"
+            export PATH
+            unset _OLD_CLJENV_PATH
+        fi
+    
         if [ -n "$_OLD_CLJENV_CLOJURE_JAR" ] ; then
             CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_JAR"
             export CLOJURE_JAR
@@ -95,6 +99,7 @@ function cljenv_activate() {
 
     cljenv_deactivate nondestructive
     _OLD_CLJENV_NAME="$CLJENV_NAME"
+    _OLD_CLJENV_PATH="$PATH"
 
     if [ -z "$1" ]; then
         ENVFILE="`pwd`/.cljenv"
@@ -122,6 +127,8 @@ function cljenv_activate() {
         echo "ERROR: Cannot locate CLJENV definition at $ENVFILE"
         return 1
     fi
+
+    export PATH="$PATH_TO_CLJENV/bin:$PATH"
 
     _OLD_CLJENV_PS1="$PS1"
     if [ "`basename \"$CLJENV_NAME\"`" = "__" ] ; then
