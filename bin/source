@@ -1,4 +1,6 @@
-PATH_TO_CLJENV="$0/../"
+echo "$BASH_SOURCE"
+
+PATH_TO_CLJENV="$(dirname $BASH_SOURCE)/../"
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
@@ -6,11 +8,11 @@ DEFAULT_CLJENV_PATH="$PATH_TO_CLJENV/default_cljenv"
 
 function cljenv_path_for_create() {
     if [ -f "$USER_CLJENV_PATH" ] ; then
-        return $USER_CLJENV_PATH
+        echo $USER_CLJENV_PATH
     elif [ -f "$SYSTEM_CLJENV_PATH" ] ; then
-        return $SYSTEM_CLJENV_PATH
+        echo $SYSTEM_CLJENV_PATH
     else
-        return $DEFAULT_CLJENV_PATH
+        echo $DEFAULT_CLJENV_PATH
     fi
 }
 
@@ -22,7 +24,7 @@ function cljenv_create() {
     fi
 
     if [ -d $TARGET ] ; then
-        cp path_for_create() $TARGET
+        cp `path_for_create` $TARGET
     else
         echo "ERROR: target $TARGET does not exist"
         exit 1
@@ -30,33 +32,6 @@ function cljenv_create() {
 }
 
 function cljenv_activate() {
-
-    _OLD_CLJENV_NAME="$CLJENV_NAME"
-
-    if [ -z "$1" ]; then
-        ENVFILE="`pwd`/.cljenv"
-        CLJENV_NAME="`pwd`"
-    elif [ -z "$2" ]; then
-        ENVFILE="$1/.cljenv"
-        CLJENV_NAME="$1"
-    else
-        ENVFILE=$1
-        CLJENV_NAME="$2"
-    fi
-
-    if [ -f $ENVFILE ] ; then
-        _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
-        _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
-        _OLD_CLJENV_CLOJURE_CONTRIB_JAR="$CLOJURE_CONTRIB_JAR"
-        _OLD_CLJENV_CLOJURE_CLASSPATH="$CLOJURE_CLASSPATH"
-        _OLD_CLJENV_CLOJURE_VM_ARGS="$CLOJURE_VM_ARGS"
-        _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH="$CLOJURE_NATIVE_LIBRARY_PATH"
-        
-        . $ENVFILE
-    else
-        echo "ERROR: Cannot locate CLJENV definition at $ENVFILE"
-        return 1
-    fi
 
     cljenv_deactivate () {
         if [ -n "$_OLD_CLJENV_CLOJURE_JAR" ] ; then
@@ -66,31 +41,31 @@ function cljenv_activate() {
         fi
 
         if [ -n "$_OLD_CLJENV_CLOJURE_CONTRIB_JAR" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_CONTRIB_JAR"
+            CLOJURE_CONTRIB_JAR="$_OLD_CLJENV_CLOJURE_CONTRIB_JAR"
             export CLOJURE_CONTRIB_JAR
             unset _OLD_CLJENV_CLOJURE_CONTRIB_JAR
         fi
 
         if [ -n "$_OLD_CLJENV_CLOJURE_JAVA_PATH" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_JAVA_PATH"
+            CLOJURE_JAVA_PATH="$_OLD_CLJENV_CLOJURE_JAVA_PATH"
             export CLOJURE_JAVA_PATH
             unset _OLD_CLJENV_CLOJURE_JAVA_PATH
         fi
 
         if [ -n "$_OLD_CLJENV_CLOJURE_CLASSPATH" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_CLASSPATH"
+            CLOJURE_CLASSPATH="$_OLD_CLJENV_CLOJURE_CLASSPATH"
             export CLOJURE_CLASSPATH
             unset _OLD_CLJENV_CLOJURE_CLASSPATH
         fi
 
         if [ -n "$_OLD_CLJENV_CLOJURE_VM_ARGS" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_VM_ARGS"
+            CLOJURE_VM_ARGS="$_OLD_CLJENV_CLOJURE_VM_ARGS"
             export CLOJURE_VM_ARGS
             unset _OLD_CLJENV_CLOJURE_VM_ARGS
         fi
 
         if [ -n "$_OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH"
+            CLOJURE_NATIVE_LIBRARY_PATH="$_OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH"
             export CLOJURE_NATIVE_LIBRARY_PATH
             unset _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH
         fi
@@ -119,8 +94,35 @@ function cljenv_activate() {
     }
 
     cljenv_deactivate nondestructive
+    _OLD_CLJENV_NAME="$CLJENV_NAME"
+
+    if [ -z "$1" ]; then
+        ENVFILE="`pwd`/.cljenv"
+        CLJENV_NAME="`pwd`"
+    elif [ -z "$2" ]; then
+        ENVFILE="$1/.cljenv"
+        CLJENV_NAME="$1"
+    else
+        ENVFILE=$1
+        CLJENV_NAME="$2"
+    fi
+
     export CLJENV_NAME
-    
+
+    if [ -f $ENVFILE ] ; then
+        _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
+        _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
+        _OLD_CLJENV_CLOJURE_CONTRIB_JAR="$CLOJURE_CONTRIB_JAR"
+        _OLD_CLJENV_CLOJURE_CLASSPATH="$CLOJURE_CLASSPATH"
+        _OLD_CLJENV_CLOJURE_VM_ARGS="$CLOJURE_VM_ARGS"
+        _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH="$CLOJURE_NATIVE_LIBRARY_PATH"
+        
+        . $ENVFILE
+    else
+        echo "ERROR: Cannot locate CLJENV definition at $ENVFILE"
+        return 1
+    fi
+
     _OLD_CLJENV_PS1="$PS1"
     if [ "`basename \"$CLJENV_NAME\"`" = "__" ] ; then
     # special case for Aspen magic directories
@@ -143,15 +145,15 @@ function cljenv_activate() {
 }
 
 function cljenv_system() {
-    return cljenv_activate $SYSTEM_CLJENV_PATH system
+    cljenv_activate $SYSTEM_CLJENV_PATH system
 }
 
 function cljenv_user() {
-    return cljenv_activate $USER_CLJENV_PATH user
+    cljenv_activate $USER_CLJENV_PATH user
 }
 
 function cljenv_default {
-    return cljenv_activate $DEFAULT_CLJENV_PATH default
+    cljenv_activate $DEFAULT_CLJENV_PATH default
 }
 
 cljenv_activate || cljenv_user || cljenv_system || cljenv_default
