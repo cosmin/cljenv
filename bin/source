@@ -1,4 +1,4 @@
-PATH_TO_CLJENV="$(dirname $BASH_SOURCE)/../"
+PATH_TO_CLJENV="$(cd $(dirname $0)/../ && pwd)"
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
@@ -42,7 +42,7 @@ function cljenv_create() {
 function cljenv_activate() {
 
     cljenv_deactivate () {
-    
+
         unset CLOJURE_JAR
         unset CLOJURE_CONTRIB_JAR
         unset CLOJURE_JAVA_PATH
@@ -56,7 +56,7 @@ function cljenv_activate() {
             export PATH
             unset _OLD_CLJENV_PATH
         fi
-    
+
         if [ -n "$_OLD_CLJENV_CLOJURE_JAR" ] ; then
             CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_JAR"
             export CLOJURE_JAR
@@ -146,9 +146,9 @@ function cljenv_activate() {
     export CLJENV_NAME
 
     if [ -f $ENVFILE ] ; then
-    
+
         CLJENV_ROOT=$(dirname $ENVFILE)
-    
+
         _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
         _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
         _OLD_CLJENV_CLOJURE_CONTRIB_JAR="$CLOJURE_CONTRIB_JAR"
@@ -185,11 +185,11 @@ function cljenv_activate() {
         fi
         export PS1
     fi
-    
+
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
 # past commands the $PATH changes we made may not be respected
-    
+
     if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
         hash -r
     fi
@@ -218,6 +218,6 @@ function cljenv_autostart() {
 
     export _CLJENV_AUTOSTART=`cljenv_path_for_create`
     export _CLJENV_AUTOSTART_NAME=$ENV_NAME
-    
+
     cljenv_activate `cljenv_path_for_create` $ENV_NAME
 }

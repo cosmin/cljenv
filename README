@@ -3,7 +3,7 @@ CLJENV
 Installation:
 
   To start using CLJENV you just have to source the bin/source file.
-  Currently only BASH 3 or later is supported, need someone to help with ZSH.
+  Currently only BASH 3 or later or ZSH are supported.
 
 Default environments:
 
@@ -15,7 +15,7 @@ Activating an environment:
 
   cljenv_autostart # activate the first environment of USER, SYSTEM, DEFAULT
   cljenv_autostart NOPS1 # activate the first env, but surpress PS1 modification
-  
+
   cljenv_user # activate the user environment
   cljenv_system # activate the system environment
   cljenv_default # actiavte the default environment
