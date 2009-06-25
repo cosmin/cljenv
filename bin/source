@@ -1,4 +1,8 @@
-PATH_TO_CLJENV="$(cd $(dirname $0)/../ && pwd)"
+if [ -z "$BASH_SOURCE" ]; then
+   PATH_TO_CLJENV="$(cd $(dirname $0)/../ && pwd)"
+else
+   PATH_TO_CLJENV="$(dirname $BASH_SOURCE)/../"
+fi
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
