@@ -14,7 +14,7 @@
         (add-to-list 'load-path (concat shared-profile-elisp "swank-clojure/"))
         (add-to-list 'load-path (concat shared-profile-elisp "clojure-mode/"))
         
-        (setq swank-clojure-binary "clj")
+        (setq swank-clojure-binary "clojure")
         
         (require 'clojure-mode)
         (require 'swank-clojure-autoload)        
