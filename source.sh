@@ -1,7 +1,7 @@
 if [ -z "$BASH_SOURCE" ]; then
-   CLJENV_HOME="$(cd $(dirname $0)/../ && pwd)"
+   CLJENV_HOME="$(cd $(dirname $0)/ && pwd)"
 else
-   CLJENV_HOME="$(cd $(dirname $BASH_SOURCE)/../ && pwd)"
+   CLJENV_HOME="$(cd $(dirname $BASH_SOURCE)/ && pwd)"
 fi
 
 export CLJENV_HOME
