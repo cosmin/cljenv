@@ -222,8 +222,8 @@ function cljenv_autostart() {
         ENV_NAME=`_cljenv_first_available_env_name`
     fi
 
-    export _CLJENV_AUTOSTART=`cljenv_path_for_create`
+    export _CLJENV_AUTOSTART=`_cljenv_path_for_create`
     export _CLJENV_AUTOSTART_NAME=$ENV_NAME
 
-    cljenv_activate `cljenv_path_for_create` $ENV_NAME
+    cljenv_activate `_cljenv_path_for_create` $ENV_NAME
 }
