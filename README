@@ -18,7 +18,7 @@ Activating an environment:
 
   cljenv_user # activate the user environment
   cljenv_system # activate the system environment
-  cljenv_default # actiavte the default environment
+  cljenv_default # activate the default environment
 
   # use the following commmands to activate environments you create (see below)
 
