@@ -1,6 +1,6 @@
-CLOJURE_JAR="$CLJENV_ROOT/lib/clojure-1.0.0.jar" # path to clojure.jar
+CLOJURE_JAR="$CLJENV_HOME/lib/clojure-1.0.0.jar" # path to clojure.jar
 CLOJURE_CONTRIB_JAR="" # path to clojure-contrib.jar
-CLOJURE_CLASSPATH="$CLJENV_ROOT/emacs/swank-clojure" # classpath to launch clojure with
+CLOJURE_CLASSPATH="$CLJENV_HOME/emacs/swank-clojure" # classpath to launch clojure with
 
 CLOJURE_JAVA_PATH="java" # path to java executable to use
 CLOJURE_VM_ARGS="" # virtual machine arguments when starting JVM
