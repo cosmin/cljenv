@@ -1,9 +1,20 @@
 CLJENV
 
 Installation:
-
-  To start using CLJENV you just have to source the bin/source file.
   Currently only BASH 3 or later or ZSH are supported.
+  
+  Run install.sh to initialize submodules the very first time.
+  Then source setup.sh to get cljenv shell functionality.
+
+Emacs Support:
+  Place the following in your .emacs to get support for cljenv inside of Emacs.
+
+  (load (concat (getenv "CLJENV_HOME") "/" "setup.el"))
+
+  This will configure Clojure, Slime and swank-clojure to use the same
+  environment that you have activated before starting emacs. Note that at the
+  moment you will need to start Emacs from within a shell where cljenv is
+  activated.
 
 Default environments:
 
