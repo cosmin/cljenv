@@ -10,7 +10,7 @@ USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
 DEFAULT_CLJENV_PATH="$CLJENV_HOME/default_cljenv"
 
-function cljenv_first_available_env_name() {
+function _cljenv_first_available_env_name() {
    if [ -f "$USER_CLJENV_PATH" ] ; then
         echo "user"
     elif [ -f "$SYSTEM_CLJENV_PATH" ] ; then
@@ -20,7 +20,7 @@ function cljenv_first_available_env_name() {
     fi
 }
 
-function cljenv_path_for_create() {
+function _cljenv_path_for_create() {
     if [ -f "$USER_CLJENV_PATH" ] ; then
         echo $USER_CLJENV_PATH
     elif [ -f "$SYSTEM_CLJENV_PATH" ] ; then
@@ -38,7 +38,7 @@ function cljenv_create() {
     fi
 
     if [ -d $TARGET ] ; then
-        cp `cljenv_path_for_create` $TARGET/.cljenv
+        cp `_cljenv_path_for_create` $TARGET/.cljenv
     else
         echo "ERROR: target $TARGET does not exist"
         exit 1
@@ -219,7 +219,7 @@ function cljenv_autostart() {
     if [ "$1" == "NOPS1" ] ; then
         ENV_NAME="NOPS1"
     else
-        ENV_NAME=`cljenv_first_available_env_name`
+        ENV_NAME=`_cljenv_first_available_env_name`
     fi
 
     export _CLJENV_AUTOSTART=`cljenv_path_for_create`
