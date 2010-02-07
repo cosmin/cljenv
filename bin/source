@@ -1,12 +1,14 @@
 if [ -z "$BASH_SOURCE" ]; then
-   PATH_TO_CLJENV="$(cd $(dirname $0)/../ && pwd)"
+   CLJENV_HOME="$(cd $(dirname $0)/../ && pwd)"
 else
-   PATH_TO_CLJENV="$(cd $(dirname $BASH_SOURCE)/../ && pwd)"
+   CLJENV_HOME="$(cd $(dirname $BASH_SOURCE)/../ && pwd)"
 fi
+
+export CLJENV_HOME
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
-DEFAULT_CLJENV_PATH="$PATH_TO_CLJENV/default_cljenv"
+DEFAULT_CLJENV_PATH="$CLJENV_HOME/default_cljenv"
 
 function cljenv_first_available_env_name() {
    if [ -f "$USER_CLJENV_PATH" ] ; then
@@ -176,7 +178,7 @@ function cljenv_activate() {
         return 1
     fi
 
-    export PATH="$PATH_TO_CLJENV/bin:$PATH"
+    export PATH="$CLJENV_HOME/bin:$PATH"
 
     if [ "$CLJENV_NAME" != "NOPS1" ] ; then
         _OLD_CLJENV_PS1="$PS1"
