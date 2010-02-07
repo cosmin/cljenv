@@ -6,7 +6,7 @@
 
 
 (defun cljenv-init ()
-  (add-to-list 'load-path (concat cljenv-emacs-path "swank-clojure/"))
+  (add-to-list 'load-path (concat cljenv-emacs-path "swank-clojure/src/emacs/"))
   (add-to-list 'load-path (concat cljenv-emacs-path "clojure-mode/"))
 
   (if (getenv "CLJENV_HOME")
