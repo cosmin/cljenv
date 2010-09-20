@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+source $CLJENV_FILE
+
+CLOJURE_REPO=http://build.clojure.org/releases
+SWANK_REPO=http://offbytwo.github.com/repo/releases # should be clojars, but for me clojars is blocked
+
+function mvn_file_path() {
+    GROUP=$1
+    ARTIFACT=$2
+    VERSION=$3
+    echo "$HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION.jar"
+}
+
+function mvn_get() {
+    REPO=$1
+    GROUP=$2
+    ARTIFACT=$3
+    VERSION=$4
+    MVN_FILE_PATH=`mvn_file_path $GROUP $ARTIFACT $VERSION`
+
+    if [ ! -e $MVN_FILE_PATH ]; then
+        mvn org.apache.maven.plugins:maven-dependency-plugin:2.1:get -DrepoUrl=$REPO -Dartifact=$GROUP:$ARTIFACT:$VERSION:jar
+    fi
+}
+
+CLOJURE_CLASSPATH=""
+for el in "CLOJURE" "CLOJURE_CONTRIB" "SWANK_CLOJURE"; do
+    version_var_name="${el}_VERSION"
+    version=${!version_var_name}
+    jar_var_name="${el}_JAR"
+    jar=${!jar_var_name}
+    if [ -z $jar ]; then
+        artifact=`echo $el | tr '[A-Z]_' '[a-z]-'`
+        case $artifact in
+            clojure*)
+                group="org.clojure"
+                repo=$CLOJURE_REPO
+                ;;
+            swank*)
+                group="swank-clojure"
+                repo=$SWANK_REPO
+                ;;
+            *)
+                echo "Cannot determine group and repo for $artifact"
+                exit 1
+                ;;
+        esac
+        mvn_get $repo $group $artifact $version
+        jar=$(mvn_file_path $group $artifact $version)
+    fi
+    CLOJURE_CLASSPATH="$CLOJURE_CLASSPATH${jar}:"
+done
+
+echo "Starting clojure with classpath"
+echo $CLOJURE_CLASSPATH
+echo 
+
+INVOKE_LINE="$CLOJURE_JAVA_PATH $CLOJURE_VM_ARGS $CLOJURE_NATIVE_LIBRARY_PATH -cp $CLOJURE_CLASSPATH"
+
+if [ -z "$1" ] ; then
+    $INVOKE_LINE$CLJENV_HOME/lib/jline-0.9.94.jar jline.ConsoleRunner clojure.main
+else
+    case $1 in
+        swank)
+            shift
+            $INVOKE_LINE clojure.main $CLJENV_HOME/start-swank.clj "$@"
+            ;;
+        *)
+            $INVOKE_LINE clojure.main "$@"
+            ;;
+    esac
+fi
+

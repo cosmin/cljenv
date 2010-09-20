@@ -2,19 +2,21 @@ CLJENV
 
 Installation:
   Currently only BASH 3 or later or ZSH are supported.
-  
-  Run install.sh to initialize submodules the very first time.
-  Then source setup.sh to get cljenv shell functionality.
+  Source activate.sh to get cljenv shell functionality.
+
+  This will call cljenv autostart NOPS1 to initialize the default clojure
+  environment.
+
+Starting Clojure:
+  clj # starts a new clojure repl
+  clj swank # starts a clojure swank server, so you can attach 
+  clj path/to/file.clj # starts a new repl after running the following file
 
 Emacs Support:
-  Place the following in your .emacs to get support for cljenv inside of Emacs.
-
-  (load (concat (getenv "CLJENV_HOME") "/" "setup.el"))
-
-  This will configure Clojure, Slime and swank-clojure to use the same
-  environment that you have activated before starting emacs. Note that at the
-  moment you will need to start Emacs from within a shell where cljenv is
-  activated.
+  ELPA is a much better way to deal with what you need for Clojure in Emacs.
+  Install ELPA and from it you can install clojure-mode and slime. Then start
+  a swank server from the command line by running 'clj swank' and then
+  use M-x slime-connect from Emacs to connect to it.
 
 Default environments:
 
@@ -24,26 +26,26 @@ Default environments:
 
 Activating an environment:
 
-  cljenv_autostart # activate the first environment of USER, SYSTEM, DEFAULT
-  cljenv_autostart NOPS1 # activate the first env, but surpress PS1 modification
+  cljenv autostart # activate the first environment of USER, SYSTEM, DEFAULT
+  cljenv autostart NOPS1 # activate the first env, but surpress PS1 modification
 
-  cljenv_user # activate the user environment
-  cljenv_system # activate the system environment
-  cljenv_default # activate the default environment
+  cljenv user # activate the user environment
+  cljenv system # activate the system environment
+  cljenv default # activate the default environment
 
   # use the following commmands to activate environments you create (see below)
 
-  cljenv_activate # activate the environment in the current directory
-  cljenv_activate path/to/env/folder # activate the given environment
+  cljenv activate # activate the environment in the current directory
+  cljenv activate path/to/env/folder # activate the given environment
 
 Creating a new environment:
 
-  cljenv_create # create a new environment in the current folder
-  cljenv_create path_to_folder # create a new environment in the given folder
+  cljenv create # create a new environment in the current folder
+  cljenv create path_to_folder # create a new environment in the given folder
 
   After running cljenv_create edit the .cljenv file in either the current or
   specified folders to set your options for java, clojure, and clojure-contrib
 
 Deactivating an environment:
 
-  cljenv_deactivate # deactivate the currently active environment
+  cljenv deactivate # deactivate the currently active environment

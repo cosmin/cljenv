@@ -5,6 +5,7 @@ else
 fi
 
 export CLJENV_HOME
+export PATH="$CLJENV_HOME/bin:$PATH"
 
 USER_CLJENV_PATH="$HOME/.cljenv"
 SYSTEM_CLJENV_PATH="/etc/cljenv/system_cljenv"
@@ -48,55 +49,13 @@ function cljenv_create() {
 function cljenv_activate() {
 
     cljenv_deactivate () {
-
-        unset CLOJURE_JAR
-        unset CLOJURE_CONTRIB_JAR
-        unset CLOJURE_JAVA_PATH
-        unset CLOJURE_CLASSPATH
-        unset CLOJURE_VM_ARGS
-        unset CLOJURE_NATIVE_LIBRARY_PATH
         unset CLJENV_NAME
+        unset CLJENV_FILE
 
-        if [ -n "$_OLD_CLJENV_PATH" ] ; then
-            PATH="$_OLD_CLJENV_PATH"
-            export PATH
-            unset _OLD_CLJENV_PATH
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_JAR" ] ; then
-            CLOJURE_JAR="$_OLD_CLJENV_CLOJURE_JAR"
-            export CLOJURE_JAR
-            unset _OLD_CLJENV_CLOJURE_JAR
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_CONTRIB_JAR" ] ; then
-            CLOJURE_CONTRIB_JAR="$_OLD_CLJENV_CLOJURE_CONTRIB_JAR"
-            export CLOJURE_CONTRIB_JAR
-            unset _OLD_CLJENV_CLOJURE_CONTRIB_JAR
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_JAVA_PATH" ] ; then
-            CLOJURE_JAVA_PATH="$_OLD_CLJENV_CLOJURE_JAVA_PATH"
-            export CLOJURE_JAVA_PATH
-            unset _OLD_CLJENV_CLOJURE_JAVA_PATH
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_CLASSPATH" ] ; then
-            CLOJURE_CLASSPATH="$_OLD_CLJENV_CLOJURE_CLASSPATH"
-            export CLOJURE_CLASSPATH
-            unset _OLD_CLJENV_CLOJURE_CLASSPATH
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_VM_ARGS" ] ; then
-            CLOJURE_VM_ARGS="$_OLD_CLJENV_CLOJURE_VM_ARGS"
-            export CLOJURE_VM_ARGS
-            unset _OLD_CLJENV_CLOJURE_VM_ARGS
-        fi
-
-        if [ -n "$_OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH" ] ; then
-            CLOJURE_NATIVE_LIBRARY_PATH="$_OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH"
-            export CLOJURE_NATIVE_LIBRARY_PATH
-            unset _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH
+        if [ -n "$_OLD_CLJENV_FILE" ] ; then
+            CLJENV_FILE="$_OLD_CLJENV_FILE"
+            export CLJENV_FILE
+            unset _OLD_CLJENV_FILE
         fi
 
         if [ -n "$_OLD_CLJENV_NAME" ] ; then
@@ -116,27 +75,10 @@ function cljenv_activate() {
         fi
 
         unset CLJENV
-        if [ ! "$1" = "nondestructive" ] ; then
-        # Self destruct!
-            unset cljenv_deactivate
-
-            if [ -n "$_CLJENV_AUTOSTART" ] ; then
-                if [ ! "$_CLJENV_AUTOSTART" = "$CLJENV_FILE" ] ; then
-                    echo 'Going back to autostart'
-                    unset CLJENV_FILE
-                    cljenv_autostart $_CLJENV_AUTOSTART $_CLJENV_AUTOSTART_NAME
-                else
-                    echo 'Unloading autostart'
-                    unset _CLJENV_AUTOSTART_NAME
-                    unset _CLJENV_AUTOSTART
-                fi
-            fi
-        fi
     }
 
-    cljenv_deactivate nondestructive
     _OLD_CLJENV_NAME="$CLJENV_NAME"
-    _OLD_CLJENV_PATH="$PATH"
+    _OLD_CLJENV_FILE="$CLJENV_FILE"
 
     if [ -z "$1" ]; then
         ENVFILE="`pwd`/.cljenv"
@@ -152,33 +94,11 @@ function cljenv_activate() {
     export CLJENV_NAME
 
     if [ -f $ENVFILE ] ; then
-
-        CLJENV_ROOT=$(dirname $ENVFILE)
-
-        _OLD_CLJENV_CLOJURE_JAVA_PATH="$CLOJURE_JAVA_PATH"
-        _OLD_CLJENV_CLOJURE_JAR="$CLOJURE_JAR"
-        _OLD_CLJENV_CLOJURE_CONTRIB_JAR="$CLOJURE_CONTRIB_JAR"
-        _OLD_CLJENV_CLOJURE_CLASSPATH="$CLOJURE_CLASSPATH"
-        _OLD_CLJENV_CLOJURE_VM_ARGS="$CLOJURE_VM_ARGS"
-        _OLD_CLJENV_CLOJURE_NATIVE_LIBRARY_PATH="$CLOJURE_NATIVE_LIBRARY_PATH"
-        _OLD_CLJENV_FILE="$CLJENV_FILE"
-
-        . $ENVFILE
-
         export CLJENV_FILE=$ENVFILE
-
-        export CLOJURE_JAVA_PATH
-        export CLOJURE_JAR
-        export CLOJURE_CONTRIB_JAR
-        export CLOJURE_CLASSPATH
-        export CLOJURE_VM_ARGS
-        export CLOJURE_NATIVE_LIBRARY_PATH
     else
         echo "ERROR: Cannot locate CLJENV definition at $ENVFILE"
         return 1
     fi
-
-    export PATH="$CLJENV_HOME/bin:$PATH"
 
     if [ "$CLJENV_NAME" != "NOPS1" ] ; then
         _OLD_CLJENV_PS1="$PS1"
@@ -227,3 +147,11 @@ function cljenv_autostart() {
 
     cljenv_activate `_cljenv_path_for_create` $ENV_NAME
 }
+
+function cljenv() {
+    command=$1
+    shift
+    cljenv_$command $*
+}
+
+cljenv autostart NOPS1
